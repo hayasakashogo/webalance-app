@@ -1,0 +1,144 @@
+import { useRef, useEffect, CSSProperties } from "react";
+import { Box, MenuList, MenuItem, useForkRef } from "@mui/material";
+
+import { SCROLL_ITEM_HEIGHT } from "./constants/ScrollItemHeight";
+import { ScrollPickerItem } from "./ScrollPickerItem";
+import { useHandleScroll } from "./hooks/useHandleScroll";
+import { scrollToItemValue } from "./utils/scrollToItemValue";
+import { ScrollItem } from "./types/ScrollItemType";
+import { findSelectableScrollItemValue } from "./utils/findSelectableScrollItemValue";
+
+/**
+ * 擬似要素に設定する影のスタイルを生成する
+ * @param position - 配置させる位置
+ */
+const createPseudoShadowStyle = (
+    position: "top" | "bottom"
+): CSSProperties => ({
+    content: '""',
+    position: "absolute",
+    zIndex: 1,
+    top: position === "top" ? 0 : undefined,
+    bottom: position === "bottom" ? 0 : undefined,
+    left: 0,
+    width: "100%",
+    height: "40%",
+    background: `linear-gradient(to ${position}, rgba(243, 253, 254, 0), rgba(243, 253, 254, 1))`,
+    pointerEvents: "none",
+});
+
+
+
+export type ScrollPickerProps<V> = {
+    /** 選択中の値 */
+    value: V;
+    /** 選択リスト */
+    items: ScrollItem<V>[];
+    /** スクローラーの高さ */
+    height?: number;
+    /**
+     * 値が変更された時
+     * @param newValue - 新しい値
+     */
+    onChangeValue: (newValue: V) => void;
+};
+
+export const ScrollPicker = function <V>({
+    value,
+    items,
+    height = 5 * SCROLL_ITEM_HEIGHT,
+    onChangeValue,
+}: ScrollPickerProps<V>) {
+    /** 初回のスクロールか（初回はアニメーションではなく直接scrollTopを変更する） */
+    const isFirstScrollRef = useRef<boolean>(true);
+    const elMenuListRef = useRef<HTMLElement | null>(null);
+    /** スクロールの始端・終端がピッタリ真ん中で収まるように調整する余白の高さ */
+    const paddingHeight = (height - SCROLL_ITEM_HEIGHT) / 2;
+
+    useEffect(() => {
+        const elMenuList = elMenuListRef.current;
+        if (elMenuList == null) {
+            return;
+        }
+
+        const isFirstScroll = isFirstScrollRef.current;
+        isFirstScrollRef.current = false;
+
+        scrollToItemValue(elMenuList, items, value, {
+            disableAnimation: isFirstScroll,
+        });
+    }, [items, value]);
+
+    const { ref: refScroller } = useHandleScroll({
+        onFinishScroll: () => {
+            const elMenuList = elMenuListRef.current;
+            if (elMenuList == null) {
+                return;
+            }
+            const itemValue = findSelectableScrollItemValue(elMenuList, value, items);
+            if (itemValue === undefined) {
+                return;
+            }
+            // 同じ値を算出した場合は同じ場所に戻るようにスクロールして終了する
+            if (itemValue === value) {
+                scrollToItemValue(elMenuList, items, itemValue);
+                return;
+            }
+            onChangeValue(itemValue);
+        },
+    });
+    const handleRef = useForkRef(elMenuListRef, refScroller);
+
+    return (
+        <Box
+            sx={{
+                position: "relative",
+                height,
+                "&::before": createPseudoShadowStyle("top"),
+                "&::after": createPseudoShadowStyle("bottom"),
+            }}
+        >
+            <MenuList
+                className="bg-base"
+                ref={handleRef}
+                sx={{
+                    height: "100%",
+                    overflowY: "scroll",
+                    "&::-webkit-scrollbar": {
+                        display: "none",
+                    },
+                }}
+                disablePadding
+            >
+                <MenuItem
+                    key={`pad-top`}
+                    sx={{
+                        height: paddingHeight,
+                        minHeight: "auto",
+                    }}
+                    disabled
+                />
+                {items.map((item) => (
+                    <ScrollPickerItem
+                        key={String(item.value)}
+                        selected={item.value === value}
+                        disabled={item.disabled}
+                        onJustClick={() => {
+                            onChangeValue(item.value);
+                        }}
+                    >
+                        {item.label}
+                    </ScrollPickerItem>
+                ))}
+                <MenuItem
+                    key={`pad-bottom`}
+                    sx={{
+                        height: paddingHeight,
+                        minHeight: "auto",
+                    }}
+                    disabled
+                />
+            </MenuList>
+        </Box>
+    );
+};
