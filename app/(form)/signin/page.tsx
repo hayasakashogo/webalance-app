@@ -29,6 +29,10 @@ type formData = {
     password: string
 }
 
+type CoupleData = {
+    custom_couple_id: string;
+}
+
 const formSchema = z.object({
     email: z
         .string()
@@ -78,7 +82,7 @@ const SigninPage = () => {
             }
             const { data: coupleData, error: fetchError } = await supabase
                 .from('couples')
-                .select('id,custom_couple_id,image_url,primary_user:primary_user_id(id,name,icon_url), partner_user:partner_user_id(id,name,icon_url)')
+                .select('custom_couple_id')
                 .or(`primary_user_id.eq.${data.user.id},partner_user_id.eq.${data.user.id}`)
                 .returns<CoupleData[]>();
 
