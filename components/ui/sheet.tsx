@@ -7,7 +7,6 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-import { AiOutlineCloseCircle } from "react-icons/ai";
 const Sheet = SheetPrimitive.Root
 
 const SheetTrigger = SheetPrimitive.Trigger

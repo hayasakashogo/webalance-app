@@ -1,10 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { endOfMonth, format, parseISO, startOfMonth } from "date-fns"
-import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
 import {
     Form,
     FormControl,
@@ -13,22 +10,21 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { ja } from "date-fns/locale"
 import { useParams } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { useCoupleContext } from "../../context/coupleContext/CoupleContext"
 import { useExpensesContext } from "../../context/expensesContext/ExpensesContext"
 import { supabase } from "@/utils/supabase/client"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import toast from "react-hot-toast"
 import { colors } from "@/lib/colors/colors"
 import Spinner from "@/app/_components/elements/Spinner"
 import { IoMdAdd } from "react-icons/io";
-import { AnimatePresence, motion } from "framer-motion";
 import { TbReportMoney } from "react-icons/tb";
 import { CgShoppingCart } from "react-icons/cg";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // 追加
 import { Label } from "@/components/ui/label"
+import ExpensesFormDateField from "../../elements/ExpensesFormDateField/ExpensesFormDateField"
 
 const FormSchema = z.object({
     date: z.date({
@@ -62,13 +58,10 @@ export function ExpenseForm(props: ExpenseFormProps) {
         mode: "onChange",
     });
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-    const { currentUser, partner, isPrimaryUser } = useCoupleContext()
-    const { monthlyTotal, setMonthlyTotal, expenses, setExpenses } = useExpensesContext();
+    const { currentUser, isPrimaryUser } = useCoupleContext()
+    const { monthlyTotal } = useExpensesContext();
     const { coupleId, yearMonth } = useParams()
-    const startDate = startOfMonth(parseISO(`${yearMonth}-01`))
-    const endDate = endOfMonth(parseISO(`${yearMonth}-01`))
-    const initialMonth = parseISO(`${yearMonth}-01`)
-
+    
     const onSubmit = async (formData: z.infer<typeof FormSchema>) => {
         try {
             if (isSubmitting) {
@@ -137,6 +130,7 @@ export function ExpenseForm(props: ExpenseFormProps) {
                     },
                 }
             );
+            console.error(err);
         } finally {
             setIsSubmitting(false);
             setDrawerOpen(false);
@@ -147,78 +141,7 @@ export function ExpenseForm(props: ExpenseFormProps) {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col items-center max-w-[430px] mx-auto">
                 {/* 支払日 */}
-                <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => {
-                        const [isOpen, setIsOpen] = useState<boolean>(false);
-                        const calendarRef = useRef<HTMLDivElement>(null);
-
-                        useEffect(() => {
-                            const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-                                if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
-                                    setIsOpen(false);
-                                }
-                            };
-
-                            document.addEventListener("mousedown", handleClickOutside);
-                            document.addEventListener("touchstart", handleClickOutside);
-                            return () => {
-                                document.removeEventListener("mousedown", handleClickOutside);
-                                document.removeEventListener("touchstart", handleClickOutside);
-                            };
-                        }, []);
-
-                        return (
-                            <FormItem className="flex flex-col w-full">
-                                <FormLabel className="flex items-center gap-1 font-bold text-gray-500">
-                                    <CalendarIcon className="h-4 w-4" />
-                                    支払日
-                                </FormLabel>
-                                <div className="relative" ref={calendarRef}>
-                                    <div
-                                        className="cursor-pointer bg-white pl-3 text-left font-normal text-text w-full flex items-center justify-between border border-input rounded-md px-3 py-2"
-                                        onClick={() => setIsOpen(!isOpen)}
-                                    >
-                                        {field.value ? (
-                                            format(new Date(field.value), "PPP", { locale: ja })
-                                        ) : (
-                                            <span className="text-muted-foreground">日付を選択</span>
-                                        )}
-                                        <CalendarIcon className="h-4 w-4 opacity-50" />
-                                    </div>
-                                    <AnimatePresence>
-                                        {isOpen && (
-                                            <motion.div
-                                                className="absolute bottom-12 left-0 z-50 rounded-md overflow-hidden shadow-lg"
-                                                initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                transition={{ duration: 0.2, ease: "easeOut" }}
-                                            >
-                                                <Calendar
-                                                    className="bg-white"
-                                                    mode="single"
-                                                    selected={field.value}
-                                                    onSelect={(date) => {
-                                                        if (date) {
-                                                            setIsOpen(false);
-                                                            field.onChange(date);
-                                                        }
-                                                    }}
-                                                    disabled={(date) => date < startDate || date > endDate}
-                                                    initialFocus
-                                                    month={initialMonth}
-                                                />
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                                <FormMessage />
-                            </FormItem>
-                        );
-                    }}
-                />
+                <ExpensesFormDateField form={form} />
 
                 {/* 品目 */}
                 <FormField

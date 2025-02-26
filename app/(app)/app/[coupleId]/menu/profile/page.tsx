@@ -15,11 +15,9 @@ import {
     FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { handleFileUpload } from "@/lib/supabese/client/fetchImg";
 import { supabase } from "@/utils/supabase/client";
 import { FaEdit } from "react-icons/fa";
@@ -30,7 +28,7 @@ import Spinner from "@/app/_components/elements/Spinner";
 
 const formSchemaUpload = z.object({
     icon_img: z
-        .custom<FileList | undefined>((file) => true) // 型を明示的に FileList にする
+        .custom<FileList | undefined>(() => true) // 型を明示的に FileList にする
         .optional()
         .refine(
             (file) => {
@@ -103,8 +101,8 @@ export default function ProfilePage() {
             }
             setIsIconEdit(false);
 
-        } catch (err: any) {
-            setUploadError(`エラー: ${err.message}`)
+        } catch (err) {
+            setUploadError('予期せぬエラーが発生しました。')
             console.error(err)
         }
     }
@@ -124,8 +122,8 @@ export default function ProfilePage() {
             }
             setIsNameEdit(false);
 
-        } catch (err: any) {
-            setNameEditError(`エラー: ${err.message}`)
+        } catch (err) {
+            setNameEditError('予期せぬエラーが発生しました。')
             console.error(err)
         }
     }

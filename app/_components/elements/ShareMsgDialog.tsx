@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -55,6 +54,7 @@ const ShareMsgDialog = ({ coupleId }: ShareMsgDialogProps) => {
                     },
                 }
             );
+            console.error(err)
         }
     }
 

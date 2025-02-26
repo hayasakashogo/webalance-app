@@ -8,6 +8,7 @@ import { ExpensesProvider } from "../../_components/context/expensesContext/Expe
 import { getMonthlyTotal } from "./functions";
 import ShareMsgDialog from "@/app/_components/elements/ShareMsgDialog";
 import { Metadata } from "next";
+import { CoupleData, ExpensesData, ExpensesLayoutProps, FormattedUserData } from "../types";
 
 export const metadata: Metadata = {
     title: "WeBalance",

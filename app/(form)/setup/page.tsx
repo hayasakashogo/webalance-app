@@ -26,8 +26,6 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import Link from "next/link"
-
 
 const formSchema = z.object({
     couple_id: z
@@ -41,7 +39,7 @@ const formSchema = z.object({
         .min(1, { message: "名前を入力してください。" })
         .max(8, { message: "名前は8文字以内で入力してください。" }), // 8文字以内に制限
     icon_img: z
-        .custom<FileList | undefined>((file) => true) // 型を明示的に FileList にする
+        .custom<FileList | undefined>(() => true) // 型を明示的に FileList にする
         .optional()
         .refine(
             (file) => {
@@ -86,7 +84,7 @@ const checkCoupleDataStatus = async (coupleId: string): Promise<number> => {
     }
 }
 
-const setupPage = () => {
+const SetupPage = () => {
     const router = useRouter();
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -184,8 +182,8 @@ const setupPage = () => {
             }
 
             router.push(`/app/${couple_id}/${getCurrentYearMonth()}`)
-        } catch (err: any) {
-            setSubmitError(`エラー: ${err.message}`);
+        } catch (err) {
+            setSubmitError('予期せぬエラーが発生しました。');
             setIsSubmitting(false);
             console.error(err)
         }
@@ -287,4 +285,4 @@ const setupPage = () => {
     )
 }
 
-export default setupPage
+export default SetupPage;

@@ -39,7 +39,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 
 const formSchemaUpload = z.object({
     headerImg: z
-        .custom<FileList | undefined>((file) => true) // 型を明示的に FileList にする
+        .custom<FileList | undefined>(() => true) // 型を明示的に FileList にする
         .optional()
         .refine(
             (file) => {
@@ -96,8 +96,8 @@ export default function CoupleInfoPage() {
             formData.headerImg = undefined;
             setIsHeaderImgEdit(false);
 
-        } catch (err: any) {
-            setUploadError(`エラー: ${err.message}`)
+        } catch (err) {
+            setUploadError('予期せぬエラーが発生しました');
             console.error(err)
         }
     }
@@ -120,6 +120,7 @@ export default function CoupleInfoPage() {
                     },
                 }
             );
+            console.error(err)
         }
     }
 
@@ -150,7 +151,7 @@ export default function CoupleInfoPage() {
             );
             router.refresh();
 
-        } catch (error) {
+        } catch (err) {
             toast.error("予期せぬエラーが発生しました。",
                 {
                     duration: 3000,
@@ -160,6 +161,7 @@ export default function CoupleInfoPage() {
                     },
                 }
             );
+            console.error(err);
             return;
         }
 

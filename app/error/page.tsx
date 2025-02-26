@@ -2,13 +2,8 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation";
 
 const ErrorPage =()=> {
-    const router = useRouter();
-    const params = useParams();
-    console.log(params)
-
     return (
         <>
             <header>

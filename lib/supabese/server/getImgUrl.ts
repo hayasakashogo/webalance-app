@@ -6,8 +6,6 @@ export const getSignedUrl = cache(async (bucket: string, filePath: string | unde
     if (!filePath) {
         return undefined;
     }
-    
-    console.log("Fetching signed URL from Supabase");
 
     const supabase = await createClient();
     const { data, error } = await supabase
@@ -22,9 +20,6 @@ export const getSignedUrl = cache(async (bucket: string, filePath: string | unde
 
     // ここでキャッシュにデータを保存する
     const cachedSignedUrl = data.signedUrl;
-
-    // 追加: フェッチした場合のログを出力
-    console.log("New signed URL fetched:", cachedSignedUrl);
 
     return cachedSignedUrl;
 });

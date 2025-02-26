@@ -1,11 +1,10 @@
 "use client"
 
 import React, { createContext, useState, useContext, useEffect, useRef } from "react";
-import { Expense, ExpensesContextData, ExpensesProviderProps, MonthlyTotal, Payload } from "./types";
+import { Expense, ExpensesContextData, ExpensesProviderProps, MonthlyTotal} from "./types";
 import { supabase } from "@/utils/supabase/client";
 import { useParams } from "next/navigation";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
-import ExpensesRow from "../../elements/ExpensesRow /ExpensesRow ";
 import { getMonthlyTotal } from "../../../[coupleId]/[yearMonth]/functions";
 
 // Contextの初期値 (null許容)
