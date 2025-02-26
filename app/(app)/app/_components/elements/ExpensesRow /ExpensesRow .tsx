@@ -84,10 +84,6 @@ const ExpensesRow = (props: ExpensesRowProps) => {
     const { currentUser, partner, primaryUserId } = useCoupleContext();
     const { monthlyTotal } = useExpensesContext();
 
-    if (!monthlyTotal) {
-        return;
-    }
-
     // フォームエラーを toast で表示
     useEffect(() => {
         const errors = form.formState.errors;
@@ -95,6 +91,11 @@ const ExpensesRow = (props: ExpensesRowProps) => {
         if (errors.item) toast.error(errors.item.message!);
         if (errors.amount) toast.error(errors.amount.message!);
     }, [form.formState.errors]);
+
+
+    if (!monthlyTotal) {
+        return;
+    }
 
     const handleCancel = () => {
         form.reset({
