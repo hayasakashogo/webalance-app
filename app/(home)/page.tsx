@@ -3,7 +3,6 @@ import { getCurrentYearMonth } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import WeBalanceGuide from "../_components/elements/WeBalanceGuide";
 
 export default async function page() {

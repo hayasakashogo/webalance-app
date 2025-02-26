@@ -15,7 +15,7 @@ const ExpensesFormDateField = ({ form }: {
         item: string;
         amount: string;
         tax: "inclusive" | "8" | "10";
-    }, any, undefined>;
+    }, undefined>;
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const calendarRef = useRef<HTMLDivElement>(null);
