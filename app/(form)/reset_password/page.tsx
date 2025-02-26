@@ -18,7 +18,6 @@ import { supabase } from "@/utils/supabase/client";
 import { MdOutlineMailOutline } from "react-icons/md";
 import Spinner from "@/app/_components/elements/Spinner";
 import { LuSendHorizontal } from "react-icons/lu";
-import nextConfig from "@/next.config";
 import toast from "react-hot-toast";
 
 const formSchema = z.object({

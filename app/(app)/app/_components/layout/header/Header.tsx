@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import Image from "next/image"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -15,7 +15,6 @@ const Header = () => {
     return (
         <>
             <header
-                // className='fixed top-0 w-full max-w-[430px] bg-base z-10 pb-3 rounded-b-2xl'
                 className='w-full max-w-[430px]'
             >
                 <div className='w-full relative'>

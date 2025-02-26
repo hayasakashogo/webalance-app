@@ -12,13 +12,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCoupleContext } from "../../context/coupleContext/CoupleContext";
 import { formatDate } from "../../../[coupleId]/[yearMonth]/functions";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { endOfMonth, format, formatISO, parseISO, startOfMonth } from "date-fns"
+import { parseISO } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -26,26 +25,21 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { ja } from "date-fns/locale"
 import { useParams } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { supabase } from "@/utils/supabase/client";
 import { useExpensesContext } from "../../context/expensesContext/ExpensesContext";
-import { resolve } from "path";
-import { useToast } from "@/hooks/use-toast"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from "@/components/ui/form"
 import { colors } from "@/lib/colors/colors";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Spinner from "@/app/_components/elements/Spinner";
@@ -93,6 +87,14 @@ const ExpensesRow = (props: ExpensesRowProps) => {
     if (!monthlyTotal) {
         return;
     }
+
+    // フォームエラーを toast で表示
+    useEffect(() => {
+        const errors = form.formState.errors;
+        if (errors.date) toast.error(errors.date.message!);
+        if (errors.item) toast.error(errors.item.message!);
+        if (errors.amount) toast.error(errors.amount.message!);
+    }, [form.formState.errors]);
 
     const handleCancel = () => {
         form.reset({
@@ -177,7 +179,7 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                         <form onSubmit={form.handleSubmit(handleEdit)}>
                             <div className="flex items-center gap-4">
                                 {/* 支払日 */}
-                                <FormField
+                                {/* <FormField
                                     control={form.control}
                                     name="date"
                                     render={({ field, fieldState }) => {
@@ -230,14 +232,32 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                                         />
                                                     </PopoverContent>
                                                 </Popover>
-                                                {/* <FormMessage /> */}
                                             </FormItem>
                                         )
                                     }}
-                                />
+                                /> */}
+
+                                <FormField control={form.control} name="date" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>支払日</FormLabel>
+                                        <FormControl>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button variant="outline">
+                                                        {field.value ? formatDate(field.value) : "日付を選択"}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent align="start">
+                                                    <Calendar mode="single" selected={field.value} onSelect={field.onChange} month={initialMonth} />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </FormControl>
+                                    </FormItem>
+                                )} />
 
                                 {/* 品目 */}
-                                <FormField
+                                {/* <FormField
                                     control={form.control}
                                     name="item"
                                     render={({ field, fieldState }) => {
@@ -262,14 +282,21 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                                 <FormControl>
                                                     <Input type="text" placeholder={item} {...field} />
                                                 </FormControl>
-                                                {/* <FormMessage /> */}
                                             </FormItem>
                                         )
                                     }}
-                                />
+                                /> */}
+                                <FormField control={form.control} name="item" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>品目</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" {...field} />
+                                        </FormControl>
+                                    </FormItem>
+                                )} />
 
                                 {/* 金額 */}
-                                <FormField
+                                {/* <FormField
                                     control={form.control}
                                     name="amount"
                                     render={({ field, fieldState }) => {
@@ -292,11 +319,18 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                                 <FormControl>
                                                     <Input type="number" placeholder={String(amount)} {...field} />
                                                 </FormControl>
-                                                {/* <FormMessage /> */}
                                             </FormItem>
                                         )
                                     }}
-                                />
+                                /> */}
+                                <FormField control={form.control} name="amount" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>金額</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" {...field} />
+                                        </FormControl>
+                                    </FormItem>
+                                )} />
                             </div>
 
                             <div className="flex items-center justify-center gap-8 mt-4">
@@ -313,18 +347,18 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                 </button>
 
                                 <button
-                                        className="text-xs bg-primary py-1 px-2 rounded-md text-base font-bold flex items-center gap-1"
-                                        type="submit"
-                                        disabled={form.formState.isSubmitting || !form.formState.isValid}
-                                        style={{ opacity: form.formState.isSubmitting || !form.formState.isValid ? 0.5 : 1 }}
-                                    >
-                                        {form.formState.isSubmitting ? (
-                                            <Spinner size='12px' />
-                                        ) : (
-                                            <FaCheck />
-                                        )}
-                                        <span>保存する</span>
-                                    </button>
+                                    className="text-xs bg-primary py-1 px-2 rounded-md text-base font-bold flex items-center gap-1"
+                                    type="submit"
+                                    disabled={form.formState.isSubmitting || !form.formState.isValid}
+                                    style={{ opacity: form.formState.isSubmitting || !form.formState.isValid ? 0.5 : 1 }}
+                                >
+                                    {form.formState.isSubmitting ? (
+                                        <Spinner size='12px' />
+                                    ) : (
+                                        <FaCheck />
+                                    )}
+                                    <span>保存する</span>
+                                </button>
                             </div>
                         </form>
                     </Form>
@@ -367,7 +401,7 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                         className="w-full flex items-center text-red-500"
                                         onClick={() => handleDelete()}
                                     >
-                                        <RiDeleteBin6Line size={"18px"}/>
+                                        <RiDeleteBin6Line size={"18px"} />
                                         <span className="flex-1 font-bold">削除</span>
                                     </button>
 

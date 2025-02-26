@@ -7,10 +7,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { format } from "date-fns";
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
@@ -18,7 +15,11 @@ import {
 import { DateScrollPicker } from "../DateScrollPicker";
 import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-// import { formatDate } from "date-fns";
+
+type Params = {
+    coupleId:string;
+    yearMonth:string;
+}
 
 function getAdjacentMonths(year: number, month: number): { prev: string; next: string | null; } {
 

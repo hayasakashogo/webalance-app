@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,7 +18,6 @@ import { supabase } from "@/utils/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/app/_components/elements/Spinner";
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { signOut } from "@/lib/supabese/client/signout";
 import { FaCheck } from "react-icons/fa";
 

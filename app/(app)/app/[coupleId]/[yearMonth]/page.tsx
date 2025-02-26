@@ -7,8 +7,6 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableHead,
-    TableHeader,
     TableRow,
 } from "@/components/ui/table"
 import { LuSettings2 } from "react-icons/lu";
@@ -76,13 +74,6 @@ export default function ExpensesPage() {
                         }}
                     >
                         <Table>
-                            {/* <TableHeader>
-                                <TableRow>
-                                    <TableHead colSpan={5}>
-
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader> */}
                             <TableBody className="overflow-scroll">
                                 {filteredExpenses.length > 0 ? (
                                     filteredExpenses.map(data => (

@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 
-const notFound = () => {
+const NotFound = () => {
     const router = useRouter();
 
     return (
@@ -39,4 +39,4 @@ const notFound = () => {
     )
 }
 
-export default notFound
+export default NotFound

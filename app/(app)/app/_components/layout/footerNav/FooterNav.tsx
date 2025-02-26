@@ -1,19 +1,11 @@
 'use client'
 import React, { useState } from 'react'
-import { FiPlusCircle } from "react-icons/fi";
-import { AiFillHome, AiOutlineCloseCircle } from "react-icons/ai";
-import { IoMdSettings } from "react-icons/io";
-import { IoMdMenu } from "react-icons/io";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaCirclePlus } from "react-icons/fa6";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
@@ -27,15 +19,12 @@ import {
 } from "@/components/ui/sheet"
 import Link from 'next/link';
 import { useCoupleContext } from '../../context/coupleContext/CoupleContext';
-import { usePathname, useRouter } from 'next/navigation';
-import { IoMenu } from 'react-icons/io5';
+import { useRouter } from 'next/navigation';
 import { HiUser, HiUsers } from 'react-icons/hi';
 import { PiSignOutBold } from 'react-icons/pi';
-import { supabase } from '@/utils/supabase/client';
 import { ExpenseForm } from './ExpenseForm';
 import RatioSlider from './RatioSlider';
 import { colors } from '@/lib/colors/colors';
-import { buttonBaseClasses } from '@mui/material';
 import toast from 'react-hot-toast';
 import { signOut } from '@/lib/supabese/client/signout';
 import { contactFormUrl } from '@/lib/links/links';

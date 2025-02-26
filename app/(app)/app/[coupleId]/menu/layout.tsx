@@ -1,10 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
-import Header from "../../_components/layout/header/Header";
 import { notFound, redirect } from "next/navigation";
 import { getSignedUrl } from "@/lib/supabese/server/getImgUrl";
-import FooterNav from "../../_components/layout/footerNav/FooterNav";
 import { CoupleProvider } from "../../_components/context/coupleContext/CoupleContext";
 import { Metadata } from "next";
+import { CoupleData, ExpensesLayoutProps, FormattedUserData } from "../types";
 export const metadata: Metadata = {
     title: "WeBalance",
     icons: {

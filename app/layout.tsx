@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { getSession } from "@/lib/supabese/server/session";
 import { colors } from "@/lib/colors/colors";
 import { Toaster } from "react-hot-toast";
 

@@ -1,5 +1,4 @@
 import { supabase } from "@/utils/supabase/client";
-import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
 export const signOut = async (msg: string | null) => {

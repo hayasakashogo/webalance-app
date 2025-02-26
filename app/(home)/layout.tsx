@@ -1,7 +1,6 @@
 import Header from "@/app/_components/layout/header/Header";
 import { getUser } from "@/lib/supabese/server/session";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 import Footer from "../_components/layout/footer/Footer";
 
 export default async function HomeLayout({
