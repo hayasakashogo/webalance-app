@@ -21,6 +21,7 @@ import { RiLockPasswordLine } from 'react-icons/ri'
 import { PiSignInBold } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Spinner from '../../_components/elements/Spinner'
+import { APP_URL } from '@/lib/utils'
 
 const formSchema = z.object({
     email: z
@@ -84,7 +85,7 @@ const SignupPage = () => {
                 email,
                 password,
                 options: {
-                    emailRedirectTo: `${location.origin}/auth/callback`,
+                    emailRedirectTo: `${APP_URL}/auth/callback`,
                 },
             });
             if (authError) {

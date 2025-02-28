@@ -19,6 +19,7 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import Spinner from "@/app/_components/elements/Spinner";
 import { LuSendHorizontal } from "react-icons/lu";
 import toast from "react-hot-toast";
+import { APP_URL } from "@/lib/utils";
 
 const formSchema = z.object({
     email: z
@@ -45,7 +46,7 @@ const ResetPasswordPage = () => {
             setSubmitError(null);
 
             const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-                redirectTo: `${window.location.origin}/update_password`,
+                redirectTo: `${APP_URL}/update_password`,
             });
 
             if (error) {
