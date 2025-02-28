@@ -20,7 +20,6 @@ export const metadata: Metadata = {
     description: "カップル専用支出管理アプリWeBalance。WeBalanceは、カップルの支出を簡単に管理し、フェアに分担するためのアプリです。お互いに支払った金額を入力することで、月々の負担金額を計算し、どちらがどれだけ支払い合うべきかを自動で算出します。支払い比率を自由に設定でき、柔軟に使えるので、どんなライフスタイルにも対応。あなたの大切な人と、もっとスムーズにお金のやりとりをしましょう。",
 };
 
-export const revalidate = 60;
 export default async function AppLayout({ children, params }: ExpensesLayoutProps) {
     const supabase = await createClient();
     const { data: { user }, error: sessionError } = await supabase.auth.getUser();
