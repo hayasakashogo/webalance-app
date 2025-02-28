@@ -9,7 +9,6 @@ import { getMonthlyTotal } from "./functions";
 import ShareMsgDialog from "@/app/_components/elements/ShareMsgDialog";
 import { Metadata } from "next";
 import { CoupleData, ExpensesData, ExpensesLayoutProps, FormattedUserData } from "../types";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
     title: "WeBalance",
@@ -21,6 +20,7 @@ export const metadata: Metadata = {
     description: "カップル専用支出管理アプリWeBalance。WeBalanceは、カップルの支出を簡単に管理し、フェアに分担するためのアプリです。お互いに支払った金額を入力することで、月々の負担金額を計算し、どちらがどれだけ支払い合うべきかを自動で算出します。支払い比率を自由に設定でき、柔軟に使えるので、どんなライフスタイルにも対応。あなたの大切な人と、もっとスムーズにお金のやりとりをしましょう。",
 };
 
+export const revalidate = 60;
 export default async function AppLayout({ children, params }: ExpensesLayoutProps) {
     const supabase = await createClient();
     const { data: { user }, error: sessionError } = await supabase.auth.getUser();
@@ -114,15 +114,11 @@ export default async function AppLayout({ children, params }: ExpensesLayoutProp
                 primaryUserId={primary_user.id}
             >
                 <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto relative">
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <Header />
-                    </Suspense>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <main className="pb-[75px] pt-3">
-                            {children}
-                            {!partner && <ShareMsgDialog coupleId={couple.coupleId} />}
-                        </main>
-                    </Suspense>
+                    <Header />
+                    <main className="pb-[75px] pt-3">
+                        {children}
+                        {!partner && <ShareMsgDialog coupleId={couple.coupleId} />}
+                    </main>
                     <FooterNav />
                 </div>
             </ExpensesProvider>
