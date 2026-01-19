@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
-import { colors } from "./lib/colors/colors";
-import { DEFAULT_CIPHERS } from "tls";
+// import { colors } from "./lib/colors/colors";
+// import { DEFAULT_CIPHERS } from "tls";
 
 export default {
 	darkMode: ["class"],
@@ -23,25 +23,25 @@ export default {
 					foreground: 'hsl(var(--popover-foreground))'
 				},
 				base: {
-					DEFAULT: colors.base
+					DEFAULT: '#F3FDFE'
 				},
 				primary: {
-					DEFAULT: colors.primary,
-					light: colors.primary_light
+					DEFAULT: '#07B4BA',
+					light: '#E9FAFD'
 				},
 				secondary: {
-					DEFAULT: colors.secondary,
-					foreground: colors.secondary_light
+					DEFAULT: '#F17C55',
+					foreground: '#FFF2E5'
 				},
 				error: {
-					DEFAULT: colors.error,
-					foreground: colors.error_light
+					DEFAULT: '#FF5555',
+					foreground: '#FFF9F9'
 				},
 				text: {
-					DEFAULT: colors.text
+					DEFAULT: '#333'
 				},
 				gray: {
-					DEFAULT: colors.gray
+					DEFAULT: '#DDEBEA'
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',

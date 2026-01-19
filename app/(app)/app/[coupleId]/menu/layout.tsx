@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { getSignedUrl } from "@/lib/supabese/server/getImgUrl";
 import { CoupleProvider } from "../../_components/context/coupleContext/CoupleContext";
 import { Metadata } from "next";
-import { CoupleData, ExpensesLayoutProps, FormattedUserData } from "../types";
+import { CoupleData, ExpensesLayoutProps_Menu, FormattedUserData } from "../types";
 export const metadata: Metadata = {
     title: "WeBalance",
     icons: {
@@ -15,7 +15,8 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 60;
-export default async function AppLayout({ children, params }: ExpensesLayoutProps) {
+export default async function AppLayout({ children, params }: ExpensesLayoutProps_Menu
+) {
     const supabase = await createClient();
     const { data: { user }, error: sessionError } = await supabase.auth.getUser();
     if (sessionError || !user) {

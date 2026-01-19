@@ -41,8 +41,15 @@ export interface Params {
     coupleId: string;
     yearMonth: string;
 }
+export interface Params_Menu {
+    coupleId: string;
+}
 
 export interface ExpensesLayoutProps {
     children: React.ReactNode;
     params: Promise<Params>;
+}
+export interface ExpensesLayoutProps_Menu {
+    children: React.ReactNode;
+    params: Promise<Params_Menu>;
 }
