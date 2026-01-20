@@ -13,8 +13,7 @@ const ExpensesFormDateField = ({ form }: {
     form: UseFormReturn<{
         date: Date;
         item: string;
-        amount: string;
-        tax: "inclusive" | "8" | "10";
+        amount: number;
     }, undefined>;
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -64,7 +63,7 @@ const ExpensesFormDateField = ({ form }: {
                         <AnimatePresence>
                             {isOpen && (
                                 <motion.div
-                                    className="absolute bottom-12 left-0 z-50 rounded-md overflow-hidden shadow-lg"
+                                    className="absolute top-0 left-0 z-50 rounded-md overflow-hidden shadow-lg"
                                     initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95, y: -10 }}

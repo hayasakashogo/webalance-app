@@ -22,9 +22,8 @@ import Spinner from "@/app/_components/elements/Spinner"
 import { IoMdAdd } from "react-icons/io";
 import { TbReportMoney } from "react-icons/tb";
 import { CgShoppingCart } from "react-icons/cg";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // 追加
-import { Label } from "@/components/ui/label"
 import ExpensesFormDateField from "../../elements/ExpensesFormDateField/ExpensesFormDateField"
+import { Calculator } from "../../elements/Calculator/Calculator"
 
 const FormSchema = z.object({
     date: z.date({
@@ -34,11 +33,10 @@ const FormSchema = z.object({
         .string()
         .min(1, { message: "品目を入力してください。" }),
     amount: z
-        .string()
-        .refine((value) => !isNaN(Number(value)) && Number(value) > 0, {
+        .number()
+        .refine((value:number) => !isNaN(value) && value > 0, {
             message: "金額は正の数値を入力してください。",
         }),
-    tax: z.enum(["inclusive", "8", "10"]).default("inclusive"), // ラジオボタンの選択肢
 })
 
 interface ExpenseFormProps {
@@ -52,8 +50,7 @@ export function ExpenseForm(props: ExpenseFormProps) {
         defaultValues: {
             date: undefined,
             item: "",
-            amount: "",
-            tax: "inclusive", // デフォルト値を設定
+            amount: 0,
         },
         mode: "onChange",
     });
@@ -61,22 +58,15 @@ export function ExpenseForm(props: ExpenseFormProps) {
     const { currentUser, isPrimaryUser } = useCoupleContext()
     const { monthlyTotal } = useExpensesContext();
     const { coupleId, yearMonth } = useParams()
-    
+
     const onSubmit = async (formData: z.infer<typeof FormSchema>) => {
         try {
             if (isSubmitting) {
                 return;
             }
             setIsSubmitting(true);
-            const { date, item, amount, tax } = formData;
+            const { date, item, amount} = formData;
             const localDateString = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
-
-            let adjustedAmount = Number(amount);
-            if (tax === "8") {
-                adjustedAmount = Math.floor(adjustedAmount * 1.08); // 8%増、切り捨て
-            } else if (tax === "10") {
-                adjustedAmount = Math.floor(adjustedAmount * 1.10); // 10%増、切り捨て
-            }
 
             if (!monthlyTotal) {
                 const { error: expensesError } = await supabase.from("expenses").insert([
@@ -85,7 +75,7 @@ export function ExpenseForm(props: ExpenseFormProps) {
                         user_id: currentUser.id,
                         year_month: yearMonth,
                         date: localDateString,
-                        amount: adjustedAmount.toString(),
+                        amount: amount.toString(),
                         item
                     },
                 ])
@@ -96,9 +86,9 @@ export function ExpenseForm(props: ExpenseFormProps) {
                     {
                         couple_id: coupleId,
                         year_month: yearMonth,
-                        primary_user_total: isPrimaryUser ? adjustedAmount : 0,
-                        partner_user_total: isPrimaryUser ? 0 : adjustedAmount,
-                        total_amount: adjustedAmount
+                        primary_user_total: isPrimaryUser ? amount : 0,
+                        partner_user_total: isPrimaryUser ? 0 : amount,
+                        total_amount: amount
                     },
                 ])
                 if (monthlyTotalError) {
@@ -112,7 +102,7 @@ export function ExpenseForm(props: ExpenseFormProps) {
                         user_id: currentUser.id,
                         year_month: yearMonth,
                         date: localDateString,
-                        amount: adjustedAmount.toString(),
+                        amount: amount.toString(),
                         item
                     },
                 ])
@@ -168,45 +158,14 @@ export function ExpenseForm(props: ExpenseFormProps) {
                     render={({ field }) => (
                         <FormItem className="w-full">
                             <FormLabel className="flex items-center gap-1 font-bold text-gray-500">
-                                <TbReportMoney size={"16px"} />
+                                <TbReportMoney size="16px" />
                                 金額
                             </FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="金額を入力してください" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                {/* 税 */}
-                <FormField
-                    control={form.control}
-                    name="tax"
-                    render={({ field }) => (
-                        <FormItem className="w-full">
-                            {/* <FormLabel className="flex items-center gap-1 font-bold text-gray-500">
-                                税率
-                            </FormLabel> */}
-                            <FormControl>
-                                <RadioGroup
-                                    value={field.value} // 現在選択されている値を設定
-                                    onValueChange={(value) => field.onChange(value)} // ラジオボタンの選択が変わると更新
-                                    className="flex items-center justify-end gap-4"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="inclusive" id="option-inclusive" />
-                                        <Label htmlFor="option-inclusive">税込み</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="8" id="option-8" />
-                                        <Label htmlFor="option-8">+8%</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="10" id="option-10" />
-                                        <Label htmlFor="option-10">+10%</Label>
-                                    </div>
-                                </RadioGroup>
+                                <Calculator
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
