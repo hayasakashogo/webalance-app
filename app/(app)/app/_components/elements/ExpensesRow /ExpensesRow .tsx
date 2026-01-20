@@ -180,64 +180,6 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                         <form onSubmit={form.handleSubmit(handleEdit)}>
                             <div className="flex items-center gap-4">
                                 {/* 支払日 */}
-                                {/* <FormField
-                                    control={form.control}
-                                    name="date"
-                                    render={({ field, fieldState }) => {
-                                        useEffect(() => {
-                                            if (fieldState.error) {
-                                                if (fieldState.error) {
-                                                    if (fieldState.error) {
-                                                        toast.error(fieldState.error.message,
-                                                            {
-                                                                duration: 3000,
-                                                                style: {
-                                                                    backgroundColor: colors.error_light,
-                                                                    color: colors.error,
-                                                                },
-                                                            }
-                                                        );
-                                                    }
-                                                }
-                                            }
-                                        }, [fieldState.error]);
-                                        return (
-                                            <FormItem className="flex flex-col w-full">
-                                                <FormLabel>支払日</FormLabel>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <FormControl>
-                                                            <Button
-                                                                variant={"outline"}
-                                                                className={cn(
-                                                                    "pl-3 text-left font-normal text-text",
-                                                                    !field.value && "text-muted-foreground"
-                                                                )}
-                                                            >
-                                                                {field.value ? (
-                                                                    formatDate(field.value)
-                                                                ) : (
-                                                                    <span>日付を選択</span>
-                                                                )}
-                                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                            </Button>
-                                                        </FormControl>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="w-auto p-0" align="start">
-                                                        <Calendar
-                                                            mode="single"
-                                                            selected={field.value}
-                                                            onSelect={field.onChange}
-                                                            initialFocus
-                                                            month={initialMonth}
-                                                        />
-                                                    </PopoverContent>
-                                                </Popover>
-                                            </FormItem>
-                                        )
-                                    }}
-                                /> */}
-
                                 <FormField control={form.control} name="date" render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>支払日</FormLabel>
@@ -258,35 +200,6 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                 )} />
 
                                 {/* 品目 */}
-                                {/* <FormField
-                                    control={form.control}
-                                    name="item"
-                                    render={({ field, fieldState }) => {
-                                        useEffect(() => {
-                                            if (fieldState.error) {
-                                                if (fieldState.error) {
-                                                    toast.error(fieldState.error.message,
-                                                        {
-                                                            duration: 3000,
-                                                            style: {
-                                                                backgroundColor: colors.error_light,
-                                                                color: colors.error,
-                                                            },
-                                                        }
-                                                    );
-                                                }
-                                            }
-                                        }, [fieldState.error]);
-                                        return (
-                                            <FormItem className="w-full">
-                                                <FormLabel>品目</FormLabel>
-                                                <FormControl>
-                                                    <Input type="text" placeholder={item} {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )
-                                    }}
-                                /> */}
                                 <FormField control={form.control} name="item" render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>品目</FormLabel>
@@ -297,33 +210,6 @@ const ExpensesRow = (props: ExpensesRowProps) => {
                                 )} />
 
                                 {/* 金額 */}
-                                {/* <FormField
-                                    control={form.control}
-                                    name="amount"
-                                    render={({ field, fieldState }) => {
-                                        useEffect(() => {
-                                            if (fieldState.error) {
-                                                toast.error(fieldState.error.message,
-                                                    {
-                                                        duration: 3000,
-                                                        style: {
-                                                            backgroundColor: colors.error_light,
-                                                            color: colors.error,
-                                                        },
-                                                    }
-                                                );
-                                            }
-                                        }, [fieldState.error]);
-                                        return (
-                                            <FormItem className="w-full">
-                                                <FormLabel>金額</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" placeholder={String(amount)} {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )
-                                    }}
-                                /> */}
                                 <FormField control={form.control} name="amount" render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>金額</FormLabel>
