@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 import { supabase } from '@/utils/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { getCurrentYearMonth } from '@/lib/utils';
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -51,6 +51,8 @@ const SigninPage = () => {
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const params = useSearchParams();
+    const verified = params.get("verified");
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -113,7 +115,18 @@ const SigninPage = () => {
                 border: `1px solid #D9F3F6`
             }}
         >
-            <h1 className='font-bold text-2xl text-text'>Sign in</h1>
+            <h1 className="font-bold text-2xl text-text">
+                {verified ? "本登録が完了しました。" : "Sign in"}
+                {verified && (
+                    <>
+                        <br />
+                        <span className="text-sm text-text leading-none">
+                            登録したメールアドレスとパスワードでサインインしてください。
+                        </span>
+                    </>
+                )}
+            </h1>
+
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
