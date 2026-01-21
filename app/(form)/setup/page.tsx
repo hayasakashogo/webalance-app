@@ -221,9 +221,9 @@ const SetupPage = () => {
                                         <AccordionTrigger className="justify-start p-0 text-primary text-xs font-bold">Couple IDとは?</AccordionTrigger>
                                         <AccordionContent>
                                             <FormDescription className="text-xs">
-                                                パートナーと紐づけるのに使用します。<br />
-                                                ・最初に登録する人がIDを作成し、パートナーに共有<br />
-                                                ・パートナーは同じIDを入力して登録することで、二人のアカウントが紐づく
+                                                2人のアカウントを紐づける際に使用します。<br />
+                                                ・最初に登録する人がIDを作成し、パートナーに共有。<br />
+                                                ・パートナーは共有されたIDを入力してください。
                                             </FormDescription>
                                         </AccordionContent>
                                     </AccordionItem>
@@ -264,7 +264,8 @@ const SetupPage = () => {
                                     />
                                 </FormControl>
                                 <FormDescription className="text-xs">
-                                    JPG、PNG形式の画像のみアップロードできます。
+                                    ・JPG、PNG形式の画像のみアップロードできます。<br />
+                                    ・縦横比1:1の正方形画像を推奨します。
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
