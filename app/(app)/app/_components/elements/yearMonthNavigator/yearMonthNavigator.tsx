@@ -1,6 +1,5 @@
 import { colors } from "@/lib/colors/colors";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
@@ -15,11 +14,6 @@ import {
 import { DateScrollPicker } from "../DateScrollPicker";
 import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-
-type Params = {
-    coupleId:string;
-    yearMonth:string;
-}
 
 function getAdjacentMonths(year: number, month: number): { prev: string; next: string | null; } {
 
@@ -54,8 +48,8 @@ const yearMonthToString = (date: Date): string => {
     return format(date, "yyyy-MM");
 }
 
-export default function YearMonthNavigator() {
-    const { yearMonth } = useParams<Params>();
+export default function YearMonthNavigator({ yearMonth }: { yearMonth: string }) {
+    
     const [year, month] = yearMonth.split("-").map(Number);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date(yearMonth + '-01'));
     const [path, setPath] = useState<string>(yearMonthToString(selectedDate));

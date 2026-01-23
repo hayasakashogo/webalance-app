@@ -8,9 +8,20 @@ import { HiUser } from "react-icons/hi";
 import { useCoupleContext } from '../../context/coupleContext/CoupleContext';
 import YearMonthNavigator from '../../elements/yearMonthNavigator/yearMonthNavigator';
 import { colors } from '@/lib/colors/colors';
+import { useParams } from 'next/navigation'
+
+type Params = {
+    coupleId:string;
+    yearMonth:string;
+}
 
 const Header = () => {
     const { currentUser, partner, couple: { coupleId, headerImg }, isPrimaryUser } = useCoupleContext();
+    const { yearMonth } = useParams<Params>();
+    
+    if (!yearMonth) {
+        return null;
+    }
 
     return (
         <>
@@ -58,7 +69,7 @@ const Header = () => {
                     }
                 </ul>
             </header>
-            <YearMonthNavigator />
+            <YearMonthNavigator yearMonth={yearMonth} />
         </>
     )
 }

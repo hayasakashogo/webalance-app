@@ -1,20 +1,24 @@
 "use client"
 
 import React, { createContext, useState, useContext, useEffect, useRef } from "react";
-import { Expense, ExpensesContextData, ExpensesProviderProps, MonthlyTotal} from "./types";
+import { Expense, ExpensesContextData, ExpensesProviderProps, MonthlyTotal } from "./types";
 import { supabase } from "@/utils/supabase/client";
 import { useParams } from "next/navigation";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import { getMonthlyTotal } from "../../../[coupleId]/[yearMonth]/functions";
+import { useCoupleContext } from "../coupleContext/CoupleContext";
 
 // Contextの初期値 (null許容)
 const ExpensesContext = createContext<ExpensesContextData | undefined>(undefined);
 // Providerコンポーネントの作成
 
 export const ExpensesProvider: React.FC<ExpensesProviderProps> = ({
-    children, initialMonthlyTotal, initialExpenses, primaryUserId }) => {
-    const [monthlyTotal, setMonthlyTotal] = useState<MonthlyTotal>(initialMonthlyTotal);
+    children, initialExpenses }) => {
+    const { primaryUserId } = useCoupleContext();
     const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
+    const [monthlyTotal, setMonthlyTotal] = useState<MonthlyTotal>(
+        getMonthlyTotal(initialExpenses, primaryUserId)
+    );
     const { coupleId, yearMonth } = useParams();
 
     const expensesRef = useRef<Expense[]>(expenses);
@@ -22,6 +26,10 @@ export const ExpensesProvider: React.FC<ExpensesProviderProps> = ({
     useEffect(() => {
         expensesRef.current = expenses;
     }, [expenses]);
+
+    useEffect(() => {
+        setMonthlyTotal(getMonthlyTotal(expenses, primaryUserId));
+    }, [expenses, primaryUserId]);
 
     useEffect(() => {
         const expensesChannel = supabase

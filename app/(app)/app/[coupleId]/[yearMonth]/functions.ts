@@ -1,6 +1,6 @@
-import { ExpensesData, Params } from "../types";
+import { ExpensesData, ExpensesParams} from "../types";
 
-export const is_validPrams = (paramsData: Params): boolean => {
+export const is_validPrams = (paramsData: ExpensesParams): boolean => {
     const { yearMonth } = paramsData;
 
     if (isNaN(new Date(`${yearMonth}-01`).getTime())) {
