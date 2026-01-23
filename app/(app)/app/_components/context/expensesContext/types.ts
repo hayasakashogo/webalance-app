@@ -27,9 +27,7 @@ export interface ExpensesContextData {
 // Providerのprops型定義
 export interface ExpensesProviderProps {
     children: ReactNode;
-    initialMonthlyTotal: MonthlyTotal;
     initialExpenses: Expense[];
-    primaryUserId:string;
 }
 
 export interface Payload<T>  {

@@ -37,19 +37,19 @@ export interface FormattedUserData {
     icon: string | undefined;
 }
 
-export interface Params {
+export interface CoupleParams {
+    coupleId: string;
+}
+export interface ExpensesParams {
     coupleId: string;
     yearMonth: string;
-}
-export interface Params_Menu {
-    coupleId: string;
 }
 
 export interface ExpensesLayoutProps {
     children: React.ReactNode;
-    params: Promise<Params>;
+    params: Promise<ExpensesParams>;
 }
-export interface ExpensesLayoutProps_Menu {
+export interface CoupleLayoutProps {
     children: React.ReactNode;
-    params: Promise<Params_Menu>;
+    params: Promise<CoupleParams>;
 }
