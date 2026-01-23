@@ -1,3 +1,4 @@
+'use client';
 import { colors } from "@/lib/colors/colors";
 import Link from "next/link";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
@@ -13,7 +14,10 @@ import {
 } from "@/components/ui/drawer"
 import { DateScrollPicker } from "../DateScrollPicker";
 import { Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useAppTransition } from "../../context/transitionProvider/TransitionProvider";
+
 
 function getAdjacentMonths(year: number, month: number): { prev: string; next: string | null; } {
 
@@ -49,11 +53,19 @@ const yearMonthToString = (date: Date): string => {
 }
 
 export default function YearMonthNavigator({ yearMonth }: { yearMonth: string }) {
-    
     const [year, month] = yearMonth.split("-").map(Number);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date(yearMonth + '-01'));
     const [path, setPath] = useState<string>(yearMonthToString(selectedDate));
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+    const router = useRouter()
+    const { isPending, startTransition } = useAppTransition();
+    const { prev, next } = getAdjacentMonths(year, month);
+
+
+    useEffect(() => {
+        if (prev) router.prefetch(prev)
+        if (next) router.prefetch(next)
+    }, [prev, next, router])
 
 
     useEffect(() => {
@@ -64,7 +76,6 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
     const handleDateChange = (newValue: Date) => {
         setSelectedDate(newValue);
     };
-    const { prev, next } = getAdjacentMonths(year, month);
 
     return (
         <div
@@ -73,16 +84,22 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                 boxShadow: '0px 10px 12px -10px #777777',
             }}
         >
-            <Link
-                href={`${prev}`}
-                className="bg-primary rounded-full"
+            <button
+                onClick={() => {
+                    if (!prev) return
+                    startTransition(() => {
+                        router.push(prev)
+                    })
+                }}
+                disabled={isPending}
+                className="bg-primary rounded-full disabled:opacity-50"
                 style={{
                     boxShadow: `4px 4px 6px rgba(163, 177, 198, 0.4), -4px -4px 6px rgba(255, 255, 255, 0.9)`,
                     border: `1px solid #D9F3F6`
                 }}
             >
-                <IoIosArrowDropleftCircle size={'32px'} color={colors.base} />
-            </Link>
+                <IoIosArrowDropleftCircle size="32px" color={colors.base} />
+            </button>
 
             <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <DrawerTrigger>
@@ -104,9 +121,18 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                         {path === yearMonth ?
                             <button onClick={() => setDrawerOpen(false)} className="text-primary font-bold">選択</button>
                             :
-                            <Link href={path} className="text-primary font-bold">
+                            <button
+                                onClick={() => {
+                                    setDrawerOpen(false)
+                                    startTransition(() => {
+                                        router.push(path)
+                                    })
+                                }}
+                                disabled={isPending}
+                                className="text-primary font-bold disabled:opacity-50"
+                            >
                                 選択
-                            </Link>
+                            </button>
                         }
                     </div>
                     <DrawerHeader>
@@ -118,16 +144,23 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                     </Stack>
                 </DrawerContent>
             </Drawer>
-            <Link
-                href={`${next}`}
-                className="bg-primary rounded-full"
+            <button
+                onClick={() => {
+                    if (!next) return
+                    startTransition(() => {
+                        router.push(next)
+                    })
+                }}
+                disabled={isPending}
+                className="bg-primary rounded-full disabled:opacity-50"
                 style={{
                     boxShadow: `4px 4px 6px rgba(163, 177, 198, 0.4), -4px -4px 6px rgba(255, 255, 255, 0.9)`,
                     border: `1px solid #D9F3F6`
                 }}
             >
                 <IoIosArrowDroprightCircle size={'32px'} color={colors.base} />
-            </Link>
+            </button>
+
         </div>
     );
 }
