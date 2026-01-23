@@ -4,6 +4,7 @@ import { getSignedUrl } from "@/lib/supabese/server/getImgUrl";
 import { CoupleProvider } from "../_components/context/coupleContext/CoupleContext";
 import Header from "../_components/layout/header/Header";
 import { CoupleData, CoupleLayoutProps, FormattedUserData } from "./types";
+import { TransitionProvider } from "../_components/context/transitionProvider/TransitionProvider";
 
 export default async function CoupleLayout({ children, params }: CoupleLayoutProps) {
     const supabase = await createClient();
@@ -78,10 +79,12 @@ export default async function CoupleLayout({ children, params }: CoupleLayoutPro
             isPrimaryUser={isPrimaryUser}
             primaryUserId={coupleData.primary_user.id}
         >
-            <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto">
-                <Header />
-                <main className="pb-[75px] pt-3">{children}</main>
-            </div>
+            <TransitionProvider>
+                <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto">
+                    <Header />
+                    <main className="pb-[75px] pt-3">{children}</main>
+                </div>
+            </TransitionProvider>
         </CoupleProvider>
     );
 }
