@@ -17,10 +17,20 @@ export function PieChartSection() {
     const { monthlyTotal: { total_amount, primary_user_total, partner_user_total } } = useExpensesContext();
     if (total_amount == 0) {
         return (
-            <div>
-                <p className="font-bold text-center text-2xl mt-4">
-                    支出はありません。
-                </p>
+            <div
+                className="rounded-2xl py-6"
+                style={{
+                    boxShadow: `4px 4px 6px rgba(163, 177, 198, 0.4), -4px -4px 6px rgba(255, 255, 255, 0.9)`,
+                    border: `1px solid #D9F3F6`
+                }}
+            >
+                <div className="grid place-items-center">
+                    <div className="rounded-full bg-base flex items-center justify-center">
+                        <p className="font-bold text-center text-xl text-text">
+                            支出はありません。
+                        </p>
+                    </div>
+                </div>
             </div>
         )
     }
