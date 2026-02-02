@@ -12,7 +12,9 @@ export default function ExpensesSkeleton() {
                     border: `1px solid #D9F3F6`
                 }}
             >
-                <div className="w-[150px] h-[150px] rounded-full bg-slate-200" />
+                <div className="w-[150px] h-[150px] rounded-full bg-slate-200 flex items-center justify-center">
+                    <div className="w-[110px] h-[110px] rounded-full bg-base" />
+                </div>
                 <div className="w-[150px] pr-6 space-y-10">
                     <div className="h-6 bg-slate-200 rounded-md" />
                     <div className="h-6 bg-slate-200 rounded-md" />
@@ -28,9 +30,9 @@ export default function ExpensesSkeleton() {
                 }}
             >
                 <div className="w-7 h-7 rounded-sm bg-slate-200 p-3" />
-                    <div className="h-4 w-12 bg-slate-200 rounded-md" />
-                    <div className="h-4 w-12 bg-slate-200 rounded-md" />
-                    <div className="h-4 w-12 bg-slate-200 rounded-md" />
+                <div className="h-4 w-12 bg-slate-200 rounded-md" />
+                <div className="h-4 w-12 bg-slate-200 rounded-md" />
+                <div className="h-4 w-12 bg-slate-200 rounded-md" />
             </div>
 
             {/* Expenses Table Skeleton */}

@@ -1,6 +1,5 @@
 'use client';
 import { colors } from "@/lib/colors/colors";
-import Link from "next/link";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
@@ -17,9 +16,12 @@ import { Stack } from "@mui/material";
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAppTransition } from "../../context/transitionProvider/TransitionProvider";
+import { useDirection } from "../../context/directionContext/DirectionContext";
 
 
-function getAdjacentMonths(year: number, month: number): { prev: string; next: string | null; } {
+function getAdjacentPath(yearMonth: string): { prev: string; next: string | null; } {
+
+    const { year, month } = getYearMonthObj(yearMonth);
 
     // 現在の年月を基準にDateオブジェクトを生成
     const currentDate = new Date(year, month - 1); // 月は0始まりなので-1
@@ -48,19 +50,24 @@ function getAdjacentMonths(year: number, month: number): { prev: string; next: s
     };
 }
 
+const getYearMonthObj = (yearMonth: string): { year: number; month: number } => {
+    const [year, month] = yearMonth.split("-").map(Number);
+    return { year, month };
+}
+
 const yearMonthToString = (date: Date): string => {
     return format(date, "yyyy-MM");
 }
 
 export default function YearMonthNavigator({ yearMonth }: { yearMonth: string }) {
-    const [year, month] = yearMonth.split("-").map(Number);
+    const [displayYearMonth, setDisplayYearMonth] = useState(getYearMonthObj(yearMonth));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date(yearMonth + '-01'));
     const [path, setPath] = useState<string>(yearMonthToString(selectedDate));
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
     const router = useRouter()
     const { isPending, startTransition } = useAppTransition();
-    const { prev, next } = getAdjacentMonths(year, month);
-
+    const { prev, next } = getAdjacentPath(yearMonth);
+    const { setDirection } = useDirection();
 
     useEffect(() => {
         if (prev) router.prefetch(prev)
@@ -87,6 +94,9 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
             <button
                 onClick={() => {
                     if (!prev) return
+                    setDisplayYearMonth(getYearMonthObj(prev));
+                    setSelectedDate(new Date(prev + '-01'));
+                    setDirection('left');
                     startTransition(() => {
                         router.push(prev)
                     })
@@ -102,7 +112,10 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
             </button>
 
             <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-                <DrawerTrigger>
+                <DrawerTrigger
+                    className="disabled:opacity-50"
+                    disabled={isPending}
+                >
                     <div
                         className="font-bold text-xl bg-base px-5 py-2 rounded-full flex items-center gap-4 cursor-pointer text-text"
                         style={{
@@ -110,7 +123,7 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                             border: `1px solid #D9F3F6`
                         }}
                     >
-                        {year}年 {month}月
+                        {displayYearMonth.year}年 {displayYearMonth.month}月
                         <IoIosArrowDown size={'24px'} color={colors.text} />
 
                     </div>
@@ -123,8 +136,10 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                             :
                             <button
                                 onClick={() => {
-                                    setDrawerOpen(false)
+                                    setDisplayYearMonth(getYearMonthObj(path));
+                                    setDirection('none');
                                     startTransition(() => {
+                                        setDrawerOpen(false)
                                         router.push(path)
                                     })
                                 }}
@@ -147,6 +162,9 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
             <button
                 onClick={() => {
                     if (!next) return
+                    setDisplayYearMonth(getYearMonthObj(next));
+                    setSelectedDate(new Date(next + '-01'));
+                    setDirection('right');
                     startTransition(() => {
                         router.push(next)
                     })
