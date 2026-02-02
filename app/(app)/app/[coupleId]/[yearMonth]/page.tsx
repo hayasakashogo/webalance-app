@@ -16,16 +16,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useMemo, useState } from "react";
 import ExpensesRow from "../../_components/elements/ExpensesRow /ExpensesRow ";
 import { colors } from "@/lib/colors/colors";
-import { useAppTransition } from "../../_components/context/transitionProvider/TransitionProvider";
-import Skeleton from "./skeleton";
-
 
 export default function ExpensesPage() {
     const { currentUser, partner } = useCoupleContext();
     const { expenses } = useExpensesContext();
     const [selectedValue, setSelectedValue] = useState<string>('0');
     const [editRowId, setEditRowId] = useState<string | null>(null);
-    const { isPending } = useAppTransition();
 
     const handleChange = (val: string): void => {
         setSelectedValue(val);
@@ -35,7 +31,7 @@ export default function ExpensesPage() {
         if (selectedValue === "2" && partner) return expenses.filter(expense => expense.user_id === partner.id);
         return expenses;
     }, [selectedValue, expenses, currentUser.id, partner?.id]);
-    if (isPending) return <Skeleton />;
+
     return (
         <div className="grid grid-rows-[auto_1fr] w-[97%] mx-auto">
             <PieChartSection />

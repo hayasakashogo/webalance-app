@@ -4,7 +4,8 @@ import FooterNav from "../../_components/layout/footerNav/FooterNav";
 import { ExpensesProvider } from "../../_components/context/expensesContext/ExpensesContext";
 import ShareMsgDialog from "@/app/_components/elements/ShareMsgDialog";
 import { Metadata } from "next";
-import { ExpensesData, ExpensesLayoutProps} from "../types";
+import { ExpensesData, ExpensesLayoutProps } from "../types";
+import AnimationWrapper from "./animationWrapper";
 
 export const metadata: Metadata = {
     title: "WeBalance",
@@ -43,9 +44,11 @@ export default async function AppLayout({ children, params }: ExpensesLayoutProp
         <ExpensesProvider
             initialExpenses={expensesData}
         >
-            <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto relative">
+            <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto relative overflow-hidden">
                 <main className="pb-[75px] pt-3">
-                    {children}
+                    <AnimationWrapper>
+                        {children}
+                    </AnimationWrapper>
                     <ShareMsgDialog />
                 </main>
                 <FooterNav />
