@@ -44,7 +44,7 @@ export default async function AppLayout({ children, params }: ExpensesLayoutProp
         <ExpensesProvider
             initialExpenses={expensesData}
         >
-            <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto relative overflow-hidden">
+            <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto relative">
                 <main className="pb-[75px] pt-3">
                     <AnimationWrapper>
                         {children}
