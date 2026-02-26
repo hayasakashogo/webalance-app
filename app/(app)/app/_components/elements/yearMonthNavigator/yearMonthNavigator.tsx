@@ -16,7 +16,6 @@ import { Stack } from "@mui/material";
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAppTransition } from "../../context/transitionProvider/TransitionProvider";
-import { useDirection } from "../../context/directionContext/DirectionContext";
 
 
 function getAdjacentPath(yearMonth: string): { prev: string; next: string | null; } {
@@ -67,8 +66,6 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
     const router = useRouter()
     const { isPending, startTransition } = useAppTransition();
     const { prev, next } = getAdjacentPath(yearMonth);
-    const { setDirection } = useDirection();
-
     useEffect(() => {
         if (prev) router.prefetch(prev)
         if (next) router.prefetch(next)
@@ -96,7 +93,6 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                     if (!prev) return
                     setDisplayYearMonth(getYearMonthObj(prev));
                     setSelectedDate(new Date(prev + '-01'));
-                    setDirection('left');
                     startTransition(() => {
                         router.push(prev)
                     })
@@ -137,7 +133,6 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                             <button
                                 onClick={() => {
                                     setDisplayYearMonth(getYearMonthObj(path));
-                                    setDirection('none');
                                     startTransition(() => {
                                         setDrawerOpen(false)
                                         router.push(path)
@@ -164,7 +159,6 @@ export default function YearMonthNavigator({ yearMonth }: { yearMonth: string })
                     if (!next) return
                     setDisplayYearMonth(getYearMonthObj(next));
                     setSelectedDate(new Date(next + '-01'));
-                    setDirection('right');
                     startTransition(() => {
                         router.push(next)
                     })
