@@ -50,20 +50,3 @@ export async function signOut(): Promise<void> {
     }
     redirect('/');
 }
-
-// export async function signOut(): Promise<void> {
-//     try {
-//         const supabase = await createClient();
-//         const { error } = await supabase.auth.signOut();
-
-//         if (error) {
-//             console.error("Sign-out error:", error.message);
-//             redirect("/error?message=" + encodeURIComponent(error.message));
-//         }
-
-//         // redirect("/");
-//     } catch (err) {
-//         console.error("Unexpected error during sign-out:", err);
-//         redirect("/error?message=" + encodeURIComponent("予期せぬエラーが発生しました。"));
-//     }
-// }

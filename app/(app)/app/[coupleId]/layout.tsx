@@ -5,7 +5,6 @@ import { CoupleProvider } from "../_components/context/coupleContext/CoupleConte
 import Header from "../_components/layout/header/Header";
 import { CoupleData, CoupleLayoutProps, FormattedUserData } from "./types";
 import { TransitionProvider } from "../_components/context/transitionProvider/TransitionProvider";
-import { DirectionProvider } from "../_components/context/directionContext/DirectionContext";
 
 export default async function CoupleLayout({ children, params }: CoupleLayoutProps) {
     const supabase = await createClient();
@@ -81,12 +80,10 @@ export default async function CoupleLayout({ children, params }: CoupleLayoutPro
             primaryUserId={coupleData.primary_user.id}
         >
             <TransitionProvider>
-                <DirectionProvider>
-                    <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto">
-                        <Header />
-                        <main className="pb-[75px]">{children}</main>
-                    </div>
-                </DirectionProvider>
+                <div className="grid grid-rows-[auto_1fr_auto] max-h-screen max-w-[430px] mx-auto">
+                    <Header />
+                    <main className="pb-[75px]">{children}</main>
+                </div>
             </TransitionProvider>
         </CoupleProvider>
     );
